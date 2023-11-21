@@ -5,8 +5,6 @@ function chart() {
       xLabelText = "",
       yLabelText = "",
       yLabelOffsetPx = 0,
-      // xLabelText = "Time",
-      // yLabelText = "market price (open, close, change)",
       titleText = "";
 
   // Parse date and numbers
