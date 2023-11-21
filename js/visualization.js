@@ -6,7 +6,10 @@
 
     const dispatchString = "selectionUpdated";
 
-    let myChart = chart();
+    let myChart = chart()
+      .xLabel("Date")
+      .yLabel("Market Price")
+      .yLabelOffset(40)
     myChart("#chart", data);
 
 
