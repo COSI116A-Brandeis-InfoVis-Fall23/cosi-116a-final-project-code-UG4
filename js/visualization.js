@@ -2,6 +2,13 @@
 // variables and prevent 
 ((() => {
 
-  console.log("Hello, world!");
+  d3.json("data/BTC17_21.json", (data) => {
 
+    const dispatchString = "selectionUpdated";
+
+    let tableData = table()
+      .selectionDispatcher(d3.dispatch(dispatchString))
+      ("#table", data);
+
+  });
 })());
