@@ -78,15 +78,43 @@ h1, h2, h3 {
 	}
 }
 
-.my-table tbody {
-    display: block;
-    height: 400px;
-    overflow-y: auto;
-}
-
-.my-table thead, .my-table tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-}
-
+.my-table {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%; 
+	table-layout: fixed; 
+  }
+  
+  .my-table th,
+  .my-table td {
+	text-align: center;
+	padding: 8px;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+  }
+  
+  .my-table tbody {
+	display: block;
+	max-height: 400px;
+	overflow-y: auto;
+  }
+  
+  .my-table thead,
+  .my-table tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+  }
+  
+  .my-table thead {
+	display: table;
+	width: calc(100%);
+  }
+  
+  .my-table th {
+	width: calc(100% / 7);
+  }
+  
+  .my-table td {
+	width: calc(100% / 7);
+  }
