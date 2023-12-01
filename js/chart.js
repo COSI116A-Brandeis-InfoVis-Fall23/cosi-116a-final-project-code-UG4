@@ -52,14 +52,17 @@ function chart() {
             .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 60) + ")")
             .style("text-anchor", "middle")
             .style("font-size", "10px")
+            .attr("dx", "-7em")
             .text(xLabelText);
         
+        // Data title
         svg.append("text")
             .attr("x", width / 2) 
             .attr("y", 0 - (margin.top / 2))
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
+            .attr("dx", "-5.5em")
             .text("BTC-USD");
 
 
