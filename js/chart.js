@@ -7,10 +7,10 @@ function chart() {
         yLabelOffsetPx = 0,
         titleText = "";
 
-    // Bisrat: Brushing and Linking
-    let ourBrush = null,
-        selectableElements = d3.select(null),
-        dispatcher;
+    // // Bisrat: Brushing and Linking
+    // let ourBrush = null,
+    //     selectableElements = d3.select(null),
+    //     dispatcher;
 
     // Parse date and numbers
     const parseDate = d3.timeParse("%Y-%m-%d");
@@ -49,7 +49,7 @@ function chart() {
 
         // x axis label
         svg.append("text")
-            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 20) + ")")
+            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 60) + ")")
             .style("text-anchor", "middle")
             .text(xLabelText);
 
@@ -61,7 +61,7 @@ function chart() {
         // y axis label
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left + yLabelOffsetPx)
+            .attr("y", 0 - margin.left + yLabelOffsetPx - 5)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
@@ -119,54 +119,54 @@ function chart() {
 
         selectableElements = candlestick;
 
-        svg.call(brush)
+        // svg.call(brush)
 
-        // Bisrat: Highlight candlesticks when brushed
-        function brush(g) {
-            const brush = d3.brushX()
-                .on("start brush", brushed)
-                .on("end", brushended);
+        // // Bisrat: Highlight candlesticks when brushed
+        // function brush(g) {
+        //     const brush = d3.brushX()
+        //         .on("start brush", brushed)
+        //         .on("end", brushended);
 
-            ourBrush = brush;
+        //     ourBrush = brush;
 
-            g.call(brush);
+        //     g.call(brush);
 
-            function brushed() {
-                if (d3.event.selection === null) return;
-                console.log(d3.event.selection)
-                const [x0, x1] = d3.event.selection;
-                console.log("CandleStick:", candlestick);
-                candlestick.classed("selected", d =>
-                    // x0 <= x(d.Date) && x(d.Date) + x.bandwidth() <= x1 
-                     true  
-                );
-
-
-                let dispatchString = Object.getOwnPropertyNames(dispatcher._)[0];
-                //Let other charts know about brush update
-                dispatcher.call(dispatchString, this, candlestick.selectAll(".selected").data());
+        //     function brushed() {
+        //         if (d3.event.selection === null) return;
+        //         console.log(d3.event.selection)
+        //         const [x0, x1] = d3.event.selection;
+        //         console.log("CandleStick:", candlestick);
+        //         candlestick.classed("selected", d =>
+        //             // x0 <= x(d.Date) && x(d.Date) + x.bandwidth() <= x1 
+        //              true  
+        //         );
 
 
-            }
+        //         let dispatchString = Object.getOwnPropertyNames(dispatcher._)[0];
+        //         //Let other charts know about brush update
+        //         dispatcher.call(dispatchString, this, candlestick.selectAll(".selected").data());
 
-            function brushended() {
-                // if(d3.event.sourceEvent.type!="end"){
-                //     d3.select(this).call(brush.move, null);
-                //   }   
-            }
-        }
+
+        //     }
+
+        //     function brushended() {
+        //         // if(d3.event.sourceEvent.type!="end"){
+        //         //     d3.select(this).call(brush.move, null);
+        //         //   }   
+        //     }
+        // }
 
 
         return chart;
     }
 
-    // Bisrat: Brushing and Linking
-    function X(d) {
-        return xScale(xValue(d));
-    }
-    function Y(d) {
-        return yScale(yValue(d));
-    }
+    // // Bisrat: Brushing and Linking
+    // function X(d) {
+    //     return xScale(xValue(d));
+    // }
+    // function Y(d) {
+    //     return yScale(yValue(d));
+    // }
 
 
     // getter/setter methods

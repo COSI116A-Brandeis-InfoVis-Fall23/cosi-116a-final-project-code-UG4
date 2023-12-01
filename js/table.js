@@ -2,9 +2,9 @@
 
 function table() {
 
-  let ourBrush = null,
-    selectableElements = d3.select(null),
-    dispatcher;
+  // let ourBrush = null,
+  //   selectableElements = d3.select(null),
+  //   dispatcher;
   function chart(selector, data) {
     let table = d3.select(selector)
       .append("table")
