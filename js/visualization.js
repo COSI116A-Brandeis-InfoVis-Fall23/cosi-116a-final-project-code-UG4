@@ -1,18 +1,18 @@
 // Immediately Invoked Function Expression to limit access to our 
 // variables and prevent 
 ((() => {
-  let dataFile = "data/temp.json";
+  let dataFile = "data/json/temp.json";
   // Bisrat: Pick the right dataFile depending on which radio button (daily, weekly or monthly)  is selected
   function updateDataFile() {
     d3.select('#vis-svg').selectAll("*").remove();
     d3.select('#table').selectAll("*").remove();
 
     if (document.getElementById("daily").checked) {
-      dataFile = "data/temp.json"; 
+      dataFile = "data/json/temp.json"; 
     } else if (document.getElementById("weekly").checked) {
-      dataFile = "data/temp2.json"; 
+      dataFile = "data/json/temp2.json"; 
     } else if (document.getElementById("monthly").checked) {
-      dataFile = "data/temp3.json";
+      dataFile = "data/json/temp3.json";
     }
     d3.json(dataFile, (data) => {
 
