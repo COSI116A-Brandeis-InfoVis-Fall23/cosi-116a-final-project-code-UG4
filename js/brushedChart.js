@@ -108,7 +108,8 @@ function brushedChart() {
       .attr("y1", (d) => y(d.High))
       .attr("y2", (d) => y(d.Low))
       .attr("stroke", "black")
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("stroke", d => d.Open > d.Close ? "red" : "green");
 
     return brushedChart;
   }

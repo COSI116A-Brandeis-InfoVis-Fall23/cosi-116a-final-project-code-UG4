@@ -160,7 +160,8 @@ function chart() {
       .attr("y1", (d) => y(d.High))
       .attr("y2", (d) => y(d.Low))
       .attr("stroke", "black")
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("stroke", d => d.Open > d.Close ? "red" : "green");
 
     const lastDate = data[data.length - 1].Date;
     const limitRange = 60 * 24 * 3600 * 1000;
