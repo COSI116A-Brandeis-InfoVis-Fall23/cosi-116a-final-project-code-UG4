@@ -49,7 +49,7 @@ function chart() {
 
         // x axis label
         svg.append("text")
-            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 20) + ")")
+            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 60) + ")")
             .style("text-anchor", "middle")
             .text(xLabelText);
 
@@ -61,7 +61,7 @@ function chart() {
         // y axis label
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left + yLabelOffsetPx)
+            .attr("y", 0 - margin.left + yLabelOffsetPx - 5)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
@@ -119,7 +119,7 @@ function chart() {
 
         selectableElements = candlestick;
 
-        svg.call(brush)
+        // svg.call(brush)
 
         // // Bisrat: Highlight candlesticks when brushed
         // function brush(g) {
