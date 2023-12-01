@@ -72,7 +72,11 @@ function chart() {
             .style("text-anchor", "middle")
             .text(yLabelText);
   
-  
+        const tooltip = d3.select(selector)
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+        
   
         // Draw candlesticks
         svg.selectAll(".candlestick")
@@ -82,7 +86,28 @@ function chart() {
             .attr("y", d => y(Math.max(d.Open, d.Close)))
             .attr("height", d => Math.abs(y(d.Open) - y(d.Close)))
             .attr("width", x.bandwidth())
-            .attr("fill", d => d.Open > d.Close ? "red" : "green");
+            .attr("fill", d => d.Open > d.Close ? "red" : "green")
+            .on("mouseover", function(d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                tooltip.html(d.Date.toLocaleDateString('en-US', {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit"
+                    }) +
+                    "<br> Open: " + d.Open +
+                    "<br> Close: " + d.Close + 
+                    "<br> Low: " + d.Low + 
+                    "<br> High: " + d.High)
+                    .style("left", (d3.event.pageX+10) + "px")
+                    .style("top", (d3.event.pageY-28) + "px")
+            })
+            .on("mouseout", function() {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0)
+            });
   
         // Draw wicks
         svg.selectAll(".wick")
