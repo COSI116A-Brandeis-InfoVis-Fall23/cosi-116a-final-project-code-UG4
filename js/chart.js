@@ -2,8 +2,8 @@ function chart() {
     let margin = { top: 20, right: 20, bottom: 30, left: 50 },
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom,
-        xLabelText = "",
-        yLabelText = "",
+        xLabelText = "Date",
+        yLabelText = "Market Price",
         yLabelOffsetPx = 0,
         titleText = "";
 
@@ -12,23 +12,9 @@ function chart() {
         selectableElements = d3.select(null),
         dispatcher;
 
-
-
-
-
     // Parse date and numbers
     const parseDate = d3.timeParse("%Y-%m-%d");
-
     function chart(selector, data) {
-
-        let bruh = d3.select(selector)
-            .append("chart")
-            .attr("preserveAspectRatio", "xMidYMid meet")
-            .attr("viewBox", [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom].join(' '))
-            .classed("my-chart", true);
-
-        bruh.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
         data.forEach(function (d) {
             d.Date = parseDate(d.Date);
             d.Open = +d.Open;
@@ -80,8 +66,7 @@ function chart() {
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text(yLabelText);
-
-
+        
 
         // Bisrat: Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
         let candlestick = svg.selectAll(".candlestick")

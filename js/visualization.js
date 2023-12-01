@@ -24,7 +24,7 @@
         .yLabelOffset(0)
         .selectionDispatcher(d3.dispatch(dispatchString))
         ("#chart", data);
-    
+      
       let tableData = table()
         .selectionDispatcher(d3.dispatch(dispatchString))
         ("#table", data);
