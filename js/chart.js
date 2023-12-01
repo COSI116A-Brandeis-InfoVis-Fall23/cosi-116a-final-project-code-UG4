@@ -53,6 +53,14 @@ function chart() {
             .style("text-anchor", "middle")
             .style("font-size", "10px")
             .text(xLabelText);
+        
+        svg.append("text")
+            .attr("x", width / 2) 
+            .attr("y", 0 - (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text("BTC-USD");
 
 
         // Add the y Axis
