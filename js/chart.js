@@ -52,7 +52,7 @@ function chart() {
             .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 60) + ")")
             .style("text-anchor", "middle")
             .style("font-size", "10px")
-            .attr("dx", "-7em")
+            .attr("dx", "-8.5em")
             .text(xLabelText);
         
         // Data title
