@@ -23,8 +23,7 @@ function table() {
       .join("tr");
     tr.selectAll("th")
       .data(tableHeaders)
-      .enter()
-      .append("th")
+      .join("th")
       .text((d) => d);
 
     var tbody = table.selectAll("tbody").data([null]).join("tbody");

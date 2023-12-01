@@ -1,7 +1,17 @@
+function scaleBandInvert(scale) {
+  var domain = scale.domain();
+  var paddingOuter = scale(domain[0]);
+  var eachBand = scale.step();
+  return function (value) {
+    var index = Math.floor((value - paddingOuter) / eachBand);
+    return domain[Math.max(0, Math.min(index, domain.length - 1))];
+  };
+}
+
 function chart() {
   let margin = { top: 20, right: 40, bottom: 80, left: 70 },
     width = window.innerWidth - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom,
+    height = 350 - margin.top - margin.bottom,
     xLabelText = "",
     yLabelText = "",
     yLabelOffsetPx = 0,
@@ -9,7 +19,6 @@ function chart() {
 
   // Parse date and numbers
   // const parseDate = d3.timeParse("%Y-%m-%d");
-  console.log("hello");
   function chart(selector, data) {
     // let bruh = d3
     //   .select(selector)
@@ -43,8 +52,6 @@ function chart() {
     x.domain(data.map((d) => d.Date));
     y.domain([d3.min(data, (d) => d.Low), d3.max(data, (d) => d.High)]);
 
-    console.log(data);
-
     // Retrieve SVG element
     const svg = d3
       .select(selector)
@@ -52,7 +59,8 @@ function chart() {
       .data([null])
       .join("svg")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom);
+      .attr("height", height + margin.top + margin.bottom)
+      .call(responsivefy);
 
     const chartGroup = svg
       .selectAll(".chart-group")
@@ -68,12 +76,32 @@ function chart() {
       .join("g")
       .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d")))
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%B-%Y")));
+    xAxis
       .selectAll("text")
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
       .attr("dy", ".15em")
-      .attr("transform", "rotate(-65)");
+      .attr("transform", "rotate(-65)")
+      .style("visibility", (d, i) => {
+        if (x.domain()[i - 1]) {
+          return d.getMonth() === x.domain()[i - 1].getMonth()
+            ? "hidden"
+            : "visible";
+        } else {
+          return "visible";
+        }
+      });
+
+    xAxis.selectAll(".tick line").style("visibility", (d, i) => {
+      if (x.domain()[i - 1]) {
+        return d.getMonth() === x.domain()[i - 1].getMonth()
+          ? "hidden"
+          : "visible";
+      } else {
+        return "visible";
+      }
+    });
 
     // x axis label
     chartGroup
@@ -134,6 +162,54 @@ function chart() {
       .attr("stroke", "black")
       .attr("stroke-width", 1);
 
+    const lastDate = data[data.length - 1].Date;
+    const limitRange = 60 * 24 * 3600 * 1000;
+    const defaultSelection = [
+      x(d3.timeParse("%Y-%m-%d")("2020-12-01")),
+      x(lastDate),
+    ];
+
+    const brushed = ({ selection }) => {
+      let dateRange = selection.map(scaleBandInvert(x));
+      if (dateRange[1] && dateRange[0]) {
+        if (dateRange[1].getTime() - dateRange[0].getTime() > limitRange) {
+          dateRange[1] = new Date(dateRange[0].getTime() + limitRange);
+          brushGroup.call(
+            brush.move,
+            dateRange.map((d) => x(d))
+          );
+        }
+      }
+
+      let zoomedChart = brushedChart()
+        .xLabel("Date")
+        .yLabel("Market Price")
+        .yLabelOffset(0)("#brushed-chart", data, dateRange);
+    };
+
+    const brushended = ({ selection }) => {
+      if (!selection) {
+        brushGroup.call(brush.move, defaultSelection);
+      }
+    };
+
+    const brush = d3
+      .brushX()
+      .extent([
+        [0, 0.5],
+        [width, height + 0.5],
+      ])
+      .on("brush", brushed)
+      .on("end", brushended);
+
+    const brushGroup = chartGroup
+      .selectAll(".brush-group")
+      .data([null])
+      .join("g")
+      .attr("class", "brush-group")
+      .call(brush)
+      .call(brush.move, defaultSelection);
+
     return chart;
   }
 
@@ -175,4 +251,24 @@ function chart() {
     });
   };
   return chart;
+}
+
+function responsivefy(svg) {
+  const container = d3.select(svg.node().parentNode);
+  const width = parseInt(svg.style("width"), 10);
+  const height = parseInt(svg.style("height"), 10);
+  const aspectRatio = width / height;
+
+  svg
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMinYMid")
+    .call(resize);
+
+  d3.select(window).on("resize." + container.attr("id"), resize);
+
+  function resize() {
+    const targetWidth = parseInt(container.style("width"));
+    svg.attr("width", targetWidth);
+    svg.attr("height", Math.round(targetWidth / aspectRatio));
+  }
 }

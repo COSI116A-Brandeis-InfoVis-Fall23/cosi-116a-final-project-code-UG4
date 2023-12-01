@@ -20,19 +20,17 @@ const drawChartAndTable = async (dataPath) => {
     d.Close = +d.Close;
   });
 
-  const filteredData = data
-    .filter((d) => d.Date > d3.timeParse("%Y-%m-%d")("2020-10-31"))
-    .sort((a, b) => d3.ascending(a.Date, b.Date));
+  const sortedData = data.sort((a, b) => d3.ascending(a.Date, b.Date));
   const dispatchString = "selectionUpdated";
   let myChart = chart()
     .xLabel("Date")
     .yLabel("Market Price")
     .yLabelOffset(0)
-    .selectionDispatcher(d3.dispatch(dispatchString))("#chart", filteredData);
+    .selectionDispatcher(d3.dispatch(dispatchString))("#chart", sortedData);
 
   let tableData = table().selectionDispatcher(d3.dispatch(dispatchString))(
     "#table",
-    filteredData
+    sortedData
   );
 };
 
