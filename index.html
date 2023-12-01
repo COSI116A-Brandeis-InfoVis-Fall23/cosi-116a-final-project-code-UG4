@@ -61,11 +61,23 @@
   <div class="vis-holder">
     <!-- Change viewbox to whatever you want, e.g. "0 0 1000 6000" This determines your aspect ratio and coordinate system -->    
     <!-- Delete all the sample SVG code below after the viewbox to before the closing tag. Populate this part of the SVG with D3. -->
+    <form id="pick-period">
+      <input type="radio" id="daily" name="time-period" value="daily" checked>
+      <label for="daily">Daily</label><br>
+
+      <input type="radio" id="weekly" name="time-period" value="weekly">
+      <label for="weekly">Weekly</label><br>
+
+      <input type="radio" id="monthly" name="time-period" value="monthly">
+      <label for="monthly">Monthly</label>
+  </form>
+
     <svg id="vis-svg"
       preserveAspectRatio="xMidYMid meet" class="marks" viewBox="0 0 821 520" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <div class="chart-holder" id="chart"></div>
       <div class="table-holder" id="table"></div>
     </svg>
+
   </div>
   
   <!-- Your writeup goes here -->
