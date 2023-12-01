@@ -51,6 +51,7 @@ function chart() {
         svg.append("text")
             .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 60) + ")")
             .style("text-anchor", "middle")
+            .style("font-size", "10px")
             .text(xLabelText);
 
 
@@ -61,9 +62,10 @@ function chart() {
         // y axis label
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left + yLabelOffsetPx - 5)
+            .attr("y", 0 - margin.left + yLabelOffsetPx)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
+            .style("font-size", "10px")
             .style("text-anchor", "middle")
             .text(yLabelText);
         
