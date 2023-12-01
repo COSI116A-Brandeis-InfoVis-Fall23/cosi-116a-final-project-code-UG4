@@ -153,7 +153,7 @@ h3 {
 /* Bisrat: brushing and linking  */
 
 
-rect.selected {
+/* rect.selected {
 	fill: green;
 	stroke: red;
 	opacity: 5;
@@ -180,7 +180,7 @@ tr.mouseover {
 
 tr.mouseover.selected {
 	background-color: #e08fa3;
-}
+} */
 
 .vis-holder {
 	width: 100%;
