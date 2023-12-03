@@ -9,40 +9,28 @@ function scaleBandInvert(scale) {
 }
 
 function chart() {
-  let margin = { top: 20, right: 40, bottom: 80, left: 70 },
-    width = window.innerWidth - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom,
-    xLabelText = "",
-    yLabelText = "",
-    yLabelOffsetPx = 0,
+  let margin = { top: 20, right: 20, bottom: 170, left: 65 },
+    width = 1200 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom,
+    xLabelText = "Date",
+    yLabelText = "Market Price",
+    yLabelOffsetPx = 10,
     titleText = "";
 
-  // Parse date and numbers
+  // // Bisrat: Brushing and Linking
+  // let ourBrush = null,
+  //     selectableElements = d3.select(null),
+  //     dispatcher;
+
+  // // Parse date and numbers
   // const parseDate = d3.timeParse("%Y-%m-%d");
-  function chart(selector, data) {
-    // let bruh = d3
-    //   .select(selector)
-    //   .append("chart")
-    //   .attr("preserveAspectRatio", "xMidYMid meet")
-    //   .attr(
-    //     "viewBox",
-    //     [
-    //       0,
-    //       0,
-    //       width + margin.left + margin.right,
-    //       height + margin.top + margin.bottom,
-    //     ].join(" ")
-    //   )
-    //   .classed("my-chart", true);
-
-    // bruh.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  function chart(selector, data, dataSource, timePeriodName) {
     // data.forEach(function (d) {
-    //   d.Date = parseDate(d.Date);
-    //   d.Open = +d.Open;
-    //   d.High = +d.High;
-    //   d.Low = +d.Low;
-    //   d.Close = +d.Close;
+    //     d.Date = parseDate(d.Date);
+    //     d.Open = +d.Open;
+    //     d.High = +d.High;
+    //     d.Low = +d.Low;
+    //     d.Close = +d.Close;
     // });
 
     // Set up scales
@@ -76,7 +64,7 @@ function chart() {
       .join("g")
       .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%B-%Y")));
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d")));
     xAxis
       .selectAll("text")
       .style("text-anchor", "end")
@@ -105,16 +93,36 @@ function chart() {
 
     // x axis label
     chartGroup
-      .selectAll(".x-axis-label")
+      .selectAll(".x-label")
       .data([null])
       .join("text")
-      .attr("class", "x-axis-label")
+      .attr("class", "x-label")
       .attr(
         "transform",
-        "translate(" + width / 2 + " ," + (height + margin.top + 20) + ")"
+        "translate(" +
+          (margin.left + width / 2) +
+          " ," +
+          (height + margin.top + 60) +
+          ")"
       )
       .style("text-anchor", "middle")
+      .style("font-size", "15px")
+      .attr("dx", "-8.5em")
       .text(xLabelText);
+
+    // Data title
+    chartGroup
+      .selectAll(".chart-label")
+      .data([null])
+      .join("text")
+      .attr("class", "chart-label")
+      .attr("x", width / 2 + margin.left)
+      .attr("y", 0 - margin.top / 2 + 10)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px")
+      .style("font-weight", "bold")
+      .attr("dx", "-5.5em")
+      .text(dataSource);
 
     // Add the y Axis
     let yAxis = chartGroup
@@ -126,19 +134,28 @@ function chart() {
 
     // y axis label
     chartGroup
-      .selectAll(".y-axis-label")
+      .selectAll(".y-label")
       .data([null])
       .join("text")
-      .attr("class", "y-axis-label")
+      .attr("class", "y-label")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left + yLabelOffsetPx)
       .attr("x", 0 - height / 2)
       .attr("dy", "1em")
+      .style("font-size", "15px")
       .style("text-anchor", "middle")
       .text(yLabelText);
 
-    // Draw candlesticks
-    chartGroup
+    const tooltip = d3
+      .select(selector)
+      .selectAll(".tooltip")
+      .data([null])
+      .join("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    // Bisrat: Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
+    let candlestick = chartGroup
       .selectAll(".candlestick")
       .data(data)
       .join("rect")
@@ -147,7 +164,31 @@ function chart() {
       .attr("y", (d) => y(Math.max(d.Open, d.Close)))
       .attr("height", (d) => Math.abs(y(d.Open) - y(d.Close)))
       .attr("width", x.bandwidth())
-      .attr("fill", (d) => (d.Open > d.Close ? "red" : "green"));
+      .attr("fill", (d) => (d.Open > d.Close ? "red" : "green"))
+      .on("mouseover", function (event, d) {
+        tooltip.transition().duration(200).style("opacity", 1);
+        tooltip
+          .html(
+            d.Date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }) +
+              "<br> Open: " +
+              d.Open +
+              "<br> Close: " +
+              d.Close +
+              "<br> Low: " +
+              d.Low +
+              "<br> High: " +
+              d.High
+          )
+          .style("left", event.pageX + 10 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", function () {
+        tooltip.transition().duration(200).style("opacity", 0);
+      });
 
     // Draw wicks
     chartGroup
@@ -161,61 +202,80 @@ function chart() {
       .attr("y2", (d) => y(d.Low))
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("stroke", d => d.Open > d.Close ? "red" : "green");
+      // Bisrat: color the wicks the same as the candlesticks
+      .attr("stroke", (d) => (d.Open > d.Close ? "red" : "green"));
 
-    const lastDate = data[data.length - 1].Date;
-    const limitRange = 60 * 24 * 3600 * 1000;
-    const defaultSelection = [
-      x(d3.timeParse("%Y-%m-%d")("2020-12-01")),
-      x(lastDate),
-    ];
-
-    const brushed = ({ selection }) => {
-      let dateRange = selection.map(scaleBandInvert(x));
-      if (dateRange[1] && dateRange[0]) {
-        if (dateRange[1].getTime() - dateRange[0].getTime() > limitRange) {
-          dateRange[1] = new Date(dateRange[0].getTime() + limitRange);
-          brushGroup.call(
-            brush.move,
-            dateRange.map((d) => x(d))
-          );
-        }
-      }
-
-      let zoomedChart = brushedChart()
-        .xLabel("Date")
-        .yLabel("Market Price")
-        .yLabelOffset(0)("#brushed-chart", data, dateRange);
-    };
-
-    const brushended = ({ selection }) => {
-      if (!selection) {
-        brushGroup.call(brush.move, defaultSelection);
-      }
-    };
-
-    const brush = d3
-      .brushX()
-      .extent([
-        [0, 0.5],
-        [width, height + 0.5],
-      ])
-      .on("brush", brushed)
-      .on("end", brushended);
+    selectableElements = candlestick;
 
     const brushGroup = chartGroup
       .selectAll(".brush-group")
       .data([null])
       .join("g")
-      .attr("class", "brush-group")
-      .call(brush)
-      .call(brush.move, defaultSelection);
+      .attr("class", "brush-group");
+
+    if (timePeriodName === "monthly") {
+      chartGroup.selectAll(".brush-group").remove();
+      d3.select("#brushed-chart").selectAll("svg").remove();
+    } else {
+      const lastDate = data[data.length - 1].Date;
+
+      let limitRange = 0;
+      let defaultSelection;
+      if (timePeriodName === "daily") {
+        limitRange = lastDate.getTime() - data[data.length - 60].Date.getTime();
+        defaultSelection = [x(data[data.length - 60].Date), x(lastDate)];
+      } else {
+        limitRange = lastDate.getTime() - data[data.length - 15].Date.getTime();
+        defaultSelection = [x(data[data.length - 15].Date), x(lastDate)];
+      }
+
+      function brushed({ selection }) {
+        let dateRange = selection.map(scaleBandInvert(x));
+        if (dateRange[1] && dateRange[0]) {
+          if (dateRange[1].getTime() - dateRange[0].getTime() > limitRange) {
+            dateRange[1] = new Date(dateRange[0].getTime() + limitRange);
+            brushGroup.call(
+              brush.move,
+              dateRange.map((d) => x(d))
+            );
+          }
+        }
+
+        let zoomedChart = brushedChart()
+          .xLabel("Date")
+          .yLabel("Market Price")
+          .yLabelOffset(0)("#brushed-chart", data, dateRange, dataSource);
+      }
+
+      function brushended({ selection }) {
+        if (!selection) {
+          brushGroup.call(brush.move, defaultSelection);
+        }
+      }
+
+      const brush = d3
+        .brushX()
+        .extent([
+          [0, 0.5],
+          [width, height + 0.5],
+        ])
+        .on("brush", brushed)
+        .on("end", brushended);
+      brushGroup.call(brush).call(brush.move, defaultSelection);
+    }
 
     return chart;
   }
 
-  // getter/setter methods
+  // // Bisrat: Brushing and Linking
+  // function X(d) {
+  //     return xScale(xValue(d));
+  // }
+  // function Y(d) {
+  //     return yScale(yValue(d));
+  // }
 
+  // getter/setter methods
   chart.xLabel = function (_) {
     if (!arguments.length) return xLabelText;
     xLabelText = _;
