@@ -1,46 +1,84 @@
-// Immediately Invoked Function Expression to limit access to our 
-// variables and prevent 
-((() => {
-  let dataFile = "data/json/temp.json";
-  // Bisrat: Pick the right dataFile depending on which radio button (daily, weekly or monthly)  is selected
-  function updateDataFile() {
-    d3.select('#vis-svg').selectAll("*").remove();
-    d3.select('#table').selectAll("*").remove();
+// Immediately Invoked Function Expression to limit access to our
+// variables and prevent
 
-    if (document.getElementById("daily").checked) {
-      dataFile = "data/json/temp.json"; 
-    } else if (document.getElementById("weekly").checked) {
-      dataFile = "data/json/temp2.json"; 
-    } else if (document.getElementById("monthly").checked) {
-      dataFile = "data/json/temp3.json";
-    }
-    d3.json(dataFile, (data) => {
-
-      const dispatchString = "selectionUpdated";
-    
-      let myChart = chart()
-        .xLabel("Date")
-        .yLabel("Market Price")
-        .yLabelOffset(0)
-        .selectionDispatcher(d3.dispatch(dispatchString))
-        ("#chart", data);
-      
-      let tableData = table()
-        .selectionDispatcher(d3.dispatch(dispatchString))
-        ("#table", data);
-    
-      myChart.selectionDispatcher().on(dispatchString, function(selectedData) {
-          tableData.updateSelection(selectedData);
-        });
-    
-    });
+let selectedDataSource = "BTC-USD";
+const drawChartAndTable = async (dataSource) => {
+  let timePeriod;
+  let timePeriodName;
+  if (document.getElementById("daily").checked) {
+    timePeriodName = "daily";
+    timePeriod =
+      dataSource === "HGX" || dataSource === "QQQ"
+        ? "Daily_17-21"
+        : "Daily_17-20";
+  } else if (document.getElementById("weekly").checked) {
+    timePeriodName = "weekly";
+    timePeriod = "Weekly_17-20";
+  } else if (document.getElementById("monthly").checked) {
+    timePeriodName = "monthly";
+    timePeriod = "Monthly_17-20";
   }
-  document.getElementById("daily").addEventListener("change", updateDataFile);
-  document.getElementById("weekly").addEventListener("change", updateDataFile);
-  document.getElementById("monthly").addEventListener("change", updateDataFile);
+  const data = await d3.csv(`data/csv/${dataSource}/${timePeriod}.csv`);
 
-  updateDataFile();
+  let parseDate;
+  if (dataSource === "HGX" && timePeriod === "Weekly_17-20") {
+    parseDate = d3.timeParse("%m/%d/%Y");
+  } else if (dataSource === "DJI") {
+    parseDate = d3.timeParse("%m/%d/%Y");
+  } else if (dataSource === "SPX" && timePeriod === "Daily_17-20") {
+    parseDate = d3.timeParse("%m/%d/%y");
+  } else {
+    parseDate = d3.timeParse("%Y-%m-%d");
+  }
 
+  data.forEach(function (d) {
+    d.Date = parseDate(d.Date);
+    d.Open = +d.Open;
+    d.High = +d.High;
+    d.Low = +d.Low;
+    d.Close = +d.Close;
+  });
 
-  
-})());
+  const dispatchString = "selectionUpdated";
+
+  const sortedData = data.sort((a, b) => a.Date - b.Date);
+  let myChart = chart()
+    .xLabel("Date")
+    .yLabel("Market Price")
+    .yLabelOffset(0)
+    .selectionDispatcher(d3.dispatch(dispatchString))(
+    "#chart",
+    sortedData,
+    dataSource,
+    timePeriodName
+  );
+
+  let tableData = table().selectionDispatcher(d3.dispatch(dispatchString))(
+    "#table",
+    sortedData
+  );
+  myChart.selectionDispatcher().on(dispatchString, function (selectedData) {
+    tableData.updateSelection(selectedData);
+  });
+};
+
+const datasetSelect = document.getElementById("dataSelect");
+datasetSelect.value = selectedDataSource;
+
+drawChartAndTable(selectedDataSource);
+
+datasetSelect.addEventListener("change", function () {
+  selectedDataSource = this.value;
+  // Function to update the chart
+  drawChartAndTable(selectedDataSource);
+});
+
+document.getElementById("daily").addEventListener("change", () => {
+  drawChartAndTable(selectedDataSource);
+});
+document.getElementById("weekly").addEventListener("change", () => {
+  drawChartAndTable(selectedDataSource);
+});
+document.getElementById("monthly").addEventListener("change", () => {
+  drawChartAndTable(selectedDataSource);
+});
