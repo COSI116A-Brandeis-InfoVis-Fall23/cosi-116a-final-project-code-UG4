@@ -1,3 +1,4 @@
+// This function inverts a D3 scaleBand scale
 function scaleBandInvert(scale) {
   var domain = scale.domain();
   var paddingOuter = scale(domain[0]);
@@ -17,22 +18,8 @@ function chart() {
     yLabelOffsetPx = 10,
     titleText = "";
 
-  // // Bisrat: Brushing and Linking
-  // let ourBrush = null,
-  //     selectableElements = d3.select(null),
-  //     dispatcher;
 
-  // // Parse date and numbers
-  // const parseDate = d3.timeParse("%Y-%m-%d");
   function chart(selector, data, dataSource, timePeriodName) {
-    // data.forEach(function (d) {
-    //     d.Date = parseDate(d.Date);
-    //     d.Open = +d.Open;
-    //     d.High = +d.High;
-    //     d.Low = +d.Low;
-    //     d.Close = +d.Close;
-    // });
-
     // Set up scales
     const x = d3.scaleBand().range([0, width]).padding(0.1),
       y = d3.scaleLinear().range([height, 0]);
@@ -154,7 +141,7 @@ function chart() {
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-    // Bisrat: Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
+    // Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
     let candlestick = chartGroup
       .selectAll(".candlestick")
       .data(data)
@@ -202,17 +189,19 @@ function chart() {
       .attr("y2", (d) => y(d.Low))
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      // Bisrat: color the wicks the same as the candlesticks
-      .attr("stroke", (d) => (d.Open > d.Close ? "red" : "green"));
+      .attr("stroke", (d) => (d.Open > d.Close ? "red" : "green")); // color the wicks the same as the candlesticks
 
     selectableElements = candlestick;
 
+    // Selecting or creating a brush group within the chart group. 
+    // This ensures that the brush is correctly positioned within the chart.
     const brushGroup = chartGroup
       .selectAll(".brush-group")
       .data([null])
       .join("g")
       .attr("class", "brush-group");
 
+    // Conditional handling based on the selected time period
     if (timePeriodName === "monthly") {
       chartGroup.selectAll(".brush-group").remove();
       d3.select("#brushed-chart").selectAll("svg").remove();
@@ -229,6 +218,8 @@ function chart() {
         defaultSelection = [x(data[data.length - 15].Date), x(lastDate)];
       }
 
+      // Function to handle brush movement
+      // Adjusts the selected range if it exceeds the defined limit
       function brushed({ selection }) {
         let dateRange = selection.map(scaleBandInvert(x));
         if (dateRange[1] && dateRange[0]) {
@@ -247,12 +238,15 @@ function chart() {
           .yLabelOffset(0)("#brushed-chart", data, dateRange, dataSource);
       }
 
+      // Function to handle the end of brush interaction
+      // Resets the brush to the default selection if no selection is made
       function brushended({ selection }) {
         if (!selection) {
           brushGroup.call(brush.move, defaultSelection);
         }
       }
 
+      // Initializing the brush with specific dimensions and attaching event handlers
       const brush = d3
         .brushX()
         .extent([
@@ -266,14 +260,6 @@ function chart() {
 
     return chart;
   }
-
-  // // Bisrat: Brushing and Linking
-  // function X(d) {
-  //     return xScale(xValue(d));
-  // }
-  // function Y(d) {
-  //     return yScale(yValue(d));
-  // }
 
   // getter/setter methods
   chart.xLabel = function (_) {
@@ -314,6 +300,7 @@ function chart() {
   return chart;
 }
 
+// A function to make an SVG element responsive
 function responsivefy(svg) {
   const container = d3.select(svg.node().parentNode);
   const width = parseInt(svg.style("width"), 10);
@@ -327,6 +314,7 @@ function responsivefy(svg) {
 
   d3.select(window).on("resize." + container.attr("id"), resize);
 
+  // A function to resize the SVG element when the window size changes
   function resize() {
     const targetWidth = parseInt(container.style("width"));
     svg.attr("width", targetWidth);

@@ -1,10 +1,8 @@
-/* global D3 */
+
 
 function table() {
-  // let ourBrush = null,
-  //   selectableElements = d3.select(null),
-  //   dispatcher;
   function chart(selector, data) {
+    // Selects the specified DOM element and appends a table to it, or selects the existing one
     let table = d3
       .select(selector)
       .selectAll("table")
@@ -14,6 +12,7 @@ function table() {
 
     let tableHeaders = Object.keys(data[0]);
 
+    // Creates the table header row
     let tr = table
       .selectAll("thead")
       .data([null])
@@ -26,8 +25,13 @@ function table() {
       .join("th")
       .text((d) => d);
 
+    // Creates the table body
     var tbody = table.selectAll("tbody").data([null]).join("tbody");
+
+    // Binding each row of data to a table row
     var rows = tbody.selectAll("tr").data(data).join("tr");
+
+    // For each row, binding each data value to a table cell
     var cells = rows
       .selectAll("td")
       .data((row) => {
@@ -44,39 +48,7 @@ function table() {
         });
       })
       .join("td")
-      .html((d) => d.value);
-
-    // Bisrat: Brushing and Linking
-    let mouseDown = false; // Keeps track of whether the mouse is down or not
-    rows.on("mouseover", (d, i, elements) => {
-      // When the mouse is over a row
-      if (mouseDown) {
-        d3.select(elements[i]).classed("selected", true);
-        let dispatchString = Object.getOwnPropertyNames(dispatcher._)[0];
-        dispatcher.call(
-          dispatchString,
-          this,
-          table.selectAll(".selected").data()
-        );
-      }
-    });
-    rows.on("mousedown", (d, i, elements) => {
-      // When the mouse is down on a row
-      d3.selectAll(".selected").classed("selected", false);
-      mouseDown = true;
-      d3.select(elements[i]).classed("selected", true);
-      let dispatchString = Object.getOwnPropertyNames(dispatcher._)[0];
-      dispatcher.call(
-        dispatchString,
-        this,
-        table.selectAll(".selected").data()
-      );
-    });
-    rows.on("mouseup", (d, i, elements) => {
-      // when the mouse is up assign false to mouseDown
-      mouseDown = false;
-    });
-
+      .html((d) => d.value); // Setting the HTML content of each cell to the value
     return chart;
   }
 

@@ -53,7 +53,7 @@
       <li><em>How did government interventions and other developments affect the markets?</em></li>
     </ul>
 
-    <p><em>Here descriptions for the datasets in our drop down menu: </em></p>
+    <p><em>Here are the descriptions for the datasets in our drop down menu: </em></p>
     <ul>
       <li><em>BTC: Bitcoin is the first decentralized cryptocurrency. It is a form of currency with no goverment oversight. </em></li>
       <li><em>DJI: The Dow Jones Industrial Average, is a stock market index of 30 prominent companies listed on stock exchanges in the 
@@ -75,8 +75,7 @@
   
   <!-- Your visualization here -->
   <div class="vis-holder">
-    <!-- Change viewbox to whatever you want, e.g. "0 0 1000 6000" This determines your aspect ratio and coordinate system -->    
-    <!-- Delete all the sample SVG code below after the viewbox to before the closing tag. Populate this part of the SVG with D3. -->
+    <!--Dropdown menu for choosing a dataset-->
     <div class="dropdown-container">
       <label for="dataSelect">Choose a dataset:</label>
       <select id="dataSelect">
@@ -89,6 +88,8 @@
           <option value="VIX">VIX Data</option>
       </select>
     </div>
+
+    <!--Radio buttons for picking time intervals-->
     <form id="pick-period">
       <input type="radio" id="daily" name="time-period" value="daily" checked>
       <label for="daily">Daily</label><br>
@@ -114,8 +115,6 @@
 
     <h1>Demo Video</h1>
     
-    <p><em>TO BE FILLED DURING FINAL SPRINT: Embedded MP4 demo video using the HTML5 &lt;video&gt; tag. For example, this screen recording Prof. Cody Dunne made of Mike Bostock's flexible transitions in D3 slide:</em></p>
-    
     <video controls width="100%">
       <source src="files/final.mp4" type="video/mp4">
     </video>
@@ -127,7 +126,7 @@
     <h1>Data Analysis</h1>
     <p><em>Summary of data, data types, and data preprocessing.</em></p>
 
-    <p><em>We have gather BTC-USD, DJI, HGX, IXIC, QQQ, SPX, and VPX daily/weekly/monthly datasets from MarketWatch. The data is pulled in a CSV format and to process, we have written a script that converts it to JSON to be easily parsable and accessible within our code.</em></p>
+    <p><em>We have gathered BTC-USD, DJI, HGX, IXIC, QQQ, SPX, and VPX daily/weekly/monthly datasets from MarketWatch. The data is pulled in a CSV format and to process, we have written a script that converts it to JSON to be easily parsable and accessible within our code.</em></p>
 
     <h1>Task Analysis</h1>
 

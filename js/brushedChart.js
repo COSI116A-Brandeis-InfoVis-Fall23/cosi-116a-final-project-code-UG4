@@ -122,7 +122,7 @@ function brushedChart() {
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-    // Bisrat: Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
+    // Draw candlesticks (assigned a variable to candlestick and then assigned candlestick to selectableElements)
     let candlestick = chartGroup
       .selectAll(".candlestick")
       .data(filteredData)
@@ -170,21 +170,12 @@ function brushedChart() {
       .attr("y2", (d) => y(d.Low))
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      // Bisrat: color the wicks the same as the candlesticks
-      .attr("stroke", (d) => (d.Open > d.Close ? "red" : "green"));
+      .attr("stroke", (d) => (d.Open > d.Close ? "red" : "green")); // color the wicks the same as the candlesticks
 
     selectableElements = candlestick;
 
     return brushedChart;
   }
-
-  // // Bisrat: Brushing and Linking
-  // function X(d) {
-  //     return xScale(xValue(d));
-  // }
-  // function Y(d) {
-  //     return yScale(yValue(d));
-  // }
 
   // getter/setter methods
   brushedChart.xLabel = function (_) {
