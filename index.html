@@ -72,22 +72,23 @@
     <h1>Visualization</h1>
     
   </div>
-  <div class="dropdown-container">
-    <label for="dataSelect">Choose a dataset:</label>
-    <select id="dataSelect">
-        <option value="BTC-USD">BTC Data</option>
-        <option value="DJI">DJI Data</option>
-        <option value="HGX">HGX Data</option>
-        <option value="IXIC">IXIC Data</option>
-        <option value="QQQ">QQQ Data</option>
-        <option value="SPX" >SPX Data</option>
-        <option value="VIX">VIX Data</option>
-    </select>
-  </div>
+  
   <!-- Your visualization here -->
   <div class="vis-holder">
     <!-- Change viewbox to whatever you want, e.g. "0 0 1000 6000" This determines your aspect ratio and coordinate system -->    
     <!-- Delete all the sample SVG code below after the viewbox to before the closing tag. Populate this part of the SVG with D3. -->
+    <div class="dropdown-container">
+      <label for="dataSelect">Choose a dataset:</label>
+      <select id="dataSelect">
+          <option value="BTC-USD">BTC Data</option>
+          <option value="DJI">DJI Data</option>
+          <option value="HGX">HGX Data</option>
+          <option value="IXIC">IXIC Data</option>
+          <option value="QQQ">QQQ Data</option>
+          <option value="SPX" >SPX Data</option>
+          <option value="VIX">VIX Data</option>
+      </select>
+    </div>
     <form id="pick-period">
       <input type="radio" id="daily" name="time-period" value="daily" checked>
       <label for="daily">Daily</label><br>
