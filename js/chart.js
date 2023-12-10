@@ -1,10 +1,10 @@
 // This function inverts a D3 scaleBand scale
 function scaleBandInvert(scale) {
-  var domain = scale.domain();
-  var paddingOuter = scale(domain[0]);
-  var eachBand = scale.step();
+  let domain = scale.domain();
+  let paddingOuter = scale(domain[0]);
+  let eachBand = scale.step();
   return function (value) {
-    var index = Math.floor((value - paddingOuter) / eachBand);
+    let index = Math.floor((value - paddingOuter) / eachBand);
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
 }

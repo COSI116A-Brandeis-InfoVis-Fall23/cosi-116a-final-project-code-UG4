@@ -20,10 +20,10 @@ h3 {
 }
 
 /* But your visualization should be full-width and full-height */
-/* .vis-holder {
+.vis-holder {
 	width: 100%;
 	height: 100%;
-} */
+}
 
 /* Fork on GitHub ribbon via https://codepo8.github.io/css-fork-on-github-ribbon/# */
 #forkongithub a {
@@ -88,26 +88,14 @@ h3 {
 	}
 }
 
-/* Bisrat: styling form */
+/* Style for the period picker */
 #pick-period {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-
-/* .vis-svg {
-	width: 100%;
-	height: 100%;
-	display: flex;
-  flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	overflow-x: auto;
-	white-space: nowrap;
-} */
-
-
+/* Styling for a custom table */
 .my-table {
 	margin-left: auto;
 	margin-top: 40px;
@@ -116,6 +104,7 @@ h3 {
 	table-layout: fixed;
 }
 
+/* Common style for table headers and cells */
 .my-table th,
 .my-table td {
 	text-align: center;
@@ -124,11 +113,13 @@ h3 {
 	box-sizing: border-box;
 }
 
+/* Style for table body with scrollable content */
 .my-table tbody {
 	display: block;
 	max-height: 400px;
 	overflow-y: auto;
 }
+
 
 .my-table thead,
 .my-table tbody tr {
@@ -137,6 +128,7 @@ h3 {
 	table-layout: fixed;
 }
 
+/* Fixing the table header */
 .my-table thead {
 	display: table;
 	width: calc(100%);
@@ -150,45 +142,14 @@ h3 {
 	width: calc(100% / 7);
 }
 
-/* Bisrat: brushing and linking  */
-
-
-/* rect.selected {
-	fill: green;
-	stroke: red;
-	opacity: 5;
-}
-
-tr.selected {
-	background-color: rgb(192, 248, 255);
-}
-
-table.text-unselectable {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
-	user-select: none;
-	cursor: default;
-  }
-
-tr.mouseover {
-	background-color: #d6d6d6;
-}
-
-tr.mouseover.selected {
-	background-color: #e08fa3;
-} */
-
+/* Container for visualizations */
 .vis-holder {
 	width: 100%;
 	max-width: 1200px;
 	margin: auto;
-  }
+}
 
-  .tooltip {
+.tooltip {
 	position: absolute;
 	padding: 10px;
 	background-color: #5b5b5b;
@@ -199,9 +160,10 @@ tr.mouseover.selected {
 	opacity: 0;
 	transition: opacity 0.3s;
 	font-family: 'Inika', serif;
-  }
+}
 
-  .tooltip {
+/* Style for tooltips */
+.tooltip {
 	position: absolute;
 	padding: 10px;
 	background-color: #5b5b5b;
@@ -212,12 +174,12 @@ tr.mouseover.selected {
 	opacity: 0;
 	transition: opacity 0.3s;
 	font-family: 'Inika', serif;
-  }
+}
 
-  .x-axis text {
-    font-size: 1.2em;
-  }
-
-  .y-axis text {
-    font-size: 1.2em;
-  }
+/* Style for X and Y axis labels */
+.x-axis text {
+	font-size: 1.2em;
+}
+.y-axis text {
+	font-size: 1.2em;
+}

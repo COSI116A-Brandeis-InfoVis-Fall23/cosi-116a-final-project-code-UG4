@@ -26,13 +26,13 @@ function table() {
       .text((d) => d);
 
     // Creates the table body
-    var tbody = table.selectAll("tbody").data([null]).join("tbody");
+    let tbody = table.selectAll("tbody").data([null]).join("tbody");
 
     // Binding each row of data to a table row
-    var rows = tbody.selectAll("tr").data(data).join("tr");
+    let rows = tbody.selectAll("tr").data(data).join("tr");
 
     // For each row, binding each data value to a table cell
-    var cells = rows
+    let cells = rows
       .selectAll("td")
       .data((row) => {
         return tableHeaders.map((column) => {
