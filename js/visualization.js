@@ -31,8 +31,6 @@ const drawChartAndTable = async (dataSource) => {
     parseDate = d3.timeParse("%m/%d/%Y");
   } else if (dataSource === "DJI") {
     parseDate = d3.timeParse("%m/%d/%Y");
-  } else if (dataSource === "SPX" && timePeriod === "Daily_17-20") {
-    parseDate = d3.timeParse("%m/%d/%y");
   } else {
     parseDate = d3.timeParse("%Y-%m-%d");
   }
